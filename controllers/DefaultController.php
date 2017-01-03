@@ -52,7 +52,7 @@ class DefaultController extends Controller {
     }
 
     public function getColumns($tableName) {
-        $sql = 'SHOW CREATE TABLE ' . $tableName;
+        $sql = 'SHOW CREATE TABLE `' . $tableName.'`';
         $cmd = Yii::$app->db->createCommand($sql);
         $table = $cmd->queryOne();
 
@@ -71,7 +71,7 @@ class DefaultController extends Controller {
     }
 
     public function getData($tableName) {
-        $sql = 'SELECT * FROM ' . $tableName;
+        $sql = 'SELECT * FROM `' . $tableName.'`';
         $cmd = Yii::$app->db->createCommand($sql);
         $dataReader = $cmd->query();
 
@@ -108,6 +108,19 @@ class DefaultController extends Controller {
         $sql = 'SHOW TABLES';
         $cmd = Yii::$app->db->createCommand($sql);
         $tables = $cmd->queryColumn();
+
+        foreach (array_keys($tables, "unit_gudang", true) as $key) {
+            unset($tables[$key]);
+        }
+
+
+        foreach (array_keys($tables, "migration", true) as $key) {
+            unset($tables[$key]);
+        }
+
+        // print_r($tables);
+        // exit;
+
         return $tables;
     }
 
@@ -217,7 +230,10 @@ class DefaultController extends Controller {
         $flashError = '';
         $flashMsg = '';
 
-        $file = $_GET[0]['filename'];
+        $file = @$_GET[0]['filename'];
+        if(!$file){
+            $file = @$_GET[1]['filename'];
+        }
 
         $this->updateMenuItems();
         if (isset($file)) {
@@ -300,7 +316,10 @@ class DefaultController extends Controller {
         $flashError = '';
         $flashMsg = '';
 
-        $file = $_GET[0]['filename'];
+        $file = @$_GET[0]['filename'];
+        if(!$file){
+            $file = @$_GET[1]['filename'];
+        }
 
         $this->updateMenuItems();
         $sqlFile = $this->path . basename($file);
