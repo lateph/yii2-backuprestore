@@ -33,7 +33,7 @@ echo GridView::widget([
         'name',
         'size:size',
         'create_time',
-        'modified_time:relativeTime',
+        // 'modified_time:relativeTime',
         [
             'class' => 'kartik\grid\ActionColumn',
             'template' => '{restore_action}',
